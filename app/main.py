@@ -1,8 +1,12 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-
+from pathlib import Path
 from core.config import settings
+from loguru import logger
+import sys
 
+logger.remove()
+logger.add(sys.stdout, format="{time} {level} {message}")
 
 app = FastAPI(title=settings.PROJECT_NAME)
 
@@ -14,8 +18,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
-async def ok():
+async def ok(request: Request):
+    logger.debug("OK")
     return "OK"
 
 @app.get("/healthz")
